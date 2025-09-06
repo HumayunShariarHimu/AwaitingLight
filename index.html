@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Awaiting Light</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; font-family:'Roboto Condensed', sans-serif; background:black; color:white; overflow:hidden; }
+.screen { display:none; position:fixed; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+h1 { font-size:2em; font-weight:500; letter-spacing:1px; background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet); background-size:400% 400%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:rainbowGlow 5s linear infinite; text-align:center; margin-bottom:30px; }
+@keyframes rainbowGlow { 0% {background-position:0% 50%;} 50% {background-position:100% 50%;} 100% {background-position:0% 50%;} }
+#home p { font-size:1em; font-weight:100; letter-spacing:1.2px; background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet); background-size:400% 400%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:rainbowGlow 5s linear infinite; text-align:center; margin-bottom:30px; }
+@keyframes rainbowGlow { 0% {background-position:0% 50%;} 50% {background-position:100% 50%;} 100% {background-position:0% 50%;} }
+
+button { padding:10px 15px; margin:10px; font-size:0.9em; border:2px solid; border-radius:12px; border-image-slice:1; border-image-source:linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet); background:black; color:white; cursor:pointer; transition:0.3s; z-index:10; }
+button:hover { transform:scale(1.1); box-shadow:0 0 10px #fff; }
+.endBtn { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); z-index:20; }
+#visualScreen { position:relative; }
+iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; z-index:0; pointer-events:none; }
+#videoOverlay { position:absolute; top:0; left:0; width:100%; height:100%; background:black; z-index:5; transition:opacity 0.5s ease; }
+</style>
+</head>
+<body>
+
+<div id="home" class="screen">
+	<h1>AwaitingLight</h1>
+  <p>প্রতীক্ষার প্রহরে অপেক্ষা নয় — আত্মবোধই মুক্তি…<br>যেখানে পথ ও গন্তব্য স্বার্থক সফলতায় আলোকিত হউন!</p>
+  <button id="audioBtn">Audiolization</button>
+  <button id="visualBtn">Visualisation</button>
+</div>
+
+<div id="audioScreen" class="screen">
+  <button id="endAudioBtn" class="endBtn">End</button>
+  <audio id="audio1" src="https://humayunshariarhimu.github.io/AwaitingLight/AwaitingLightAudio.mp3"></audio>
+</div>
+
+<div id="visualScreen" class="screen">
+  <div id="videoOverlay"></div>
+  <iframe id="ytVideo"
+    src="https://www.youtube.com/embed/GpPUa7Red1M?autoplay=1&mute=1&loop=1&playlist=GpPUa7Red1M"
+    allow="autoplay; fullscreen"></iframe>
+  <button id="endVisualBtn" class="endBtn">End</button>
+  <audio id="audio2" src="https://humayunshariarhimu.github.io/AwaitingLight/AwaitingLightAudio.mp3"></audio>
+</div>
+
+<script>
+const screens = { home:document.getElementById('home'), audio:document.getElementById('audioScreen'), visual:document.getElementById('visualScreen') };
+const audio1 = document.getElementById('audio1'), audio2 = document.getElementById('audio2');
+const btns = { audioBtn:document.getElementById('audioBtn'), visualBtn:document.getElementById('visualBtn'), endAudioBtn:document.getElementById('endAudioBtn'), endVisualBtn:document.getElementById('endVisualBtn') };
+const ytVideo = document.getElementById('ytVideo'), overlay = document.getElementById('videoOverlay');
+const ytSrc = ytVideo.src;
+
+function show(screen){ for(let k in screens) screens[k].style.display = 'none'; screen.style.display = 'flex'; }
+function play(audio){ audio.currentTime=0; audio.play(); }
+function stop(audio){ audio.pause(); audio.currentTime=0; }
+
+// Button Events
+btns.audioBtn.onclick = ()=> { show(screens.audio); play(audio1); };
+btns.visualBtn.onclick = ()=> {
+  show(screens.visual);
+  play(audio2);
+  overlay.style.opacity = '1';
+  overlay.style.display = 'block';
+  setTimeout(()=>{
+    overlay.style.opacity = '0';
+    setTimeout(()=> overlay.style.display='none', 500);
+  }, 1500);
+};
+btns.endAudioBtn.onclick = ()=> { stop(audio1); show(screens.home); };
+btns.endVisualBtn.onclick = ()=> {
+  stop(audio2);
+  ytVideo.src = ''; ytVideo.src = ytSrc;
+  show(screens.home);
+};
+
+show(screens.home);
+</script>
+
+</body>
+</html>
